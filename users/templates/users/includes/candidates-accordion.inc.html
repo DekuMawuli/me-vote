@@ -1,0 +1,50 @@
+<div id="accordianId" class="mt-4" role="tablist" aria-multiselectable="true">
+            <div class="card">
+                <div class="card-header  breezy-bg text-white" role="tab" id="section1HeaderId">
+                    <h5 class="mb-0" data-toggle="collapse" data-parent="#accordianId" href="#section1ContentId"
+                           aria-expanded="true" aria-controls="section1ContentId" >
+                            Positions with Candidates
+                    </h5>
+                </div>
+                <div id="section1ContentId" class="collapse in" role="tabpanel" aria-labelledby="section1HeaderId">
+                    <div class="card-body">
+                        <div class="row">
+                {% for position in positions %}
+                    <div class="col-sm-12 col-md-4 mb-2">
+                        <div id="accordianId{{ position.id }}" role="tablist" aria-multiselectable="true">
+                            <div class="card ">
+                                <div class="card-header breezy-bg " role="tab" id="section2HeaderId">
+                                    <h5 data-toggle="collapse" data-parent="#accordianId{{ position.id }}" href="#section2ContentId{{ position.id }}"
+                                           aria-expanded="true" aria-controls="section2ContentId{{ position.id }}" class="text-white mb-0 tab-h">
+                                       {{ position.name }} &darr;
+                                    </h5>
+                                </div>
+                                <div id="section2ContentId{{ position.id }}" class="collapse in" role="tabpanel"
+                                     aria-labelledby="section2HeaderId">
+                                    <div class="card-body">
+                                        <ul class="list-group">
+                                            {% for candidate in position.contestants.all %}
+                                                <li class="list-group-item">
+                                                    <span><img src="{{ candidate.profile_image.url }}" alt="" class="prof-img"></span>
+                                                    {{ candidate.full_name }}
+                                                </li>
+                                            {% empty %}
+                                                <p class="text-center">No Contestant has been added Yet !!</p>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col">
+                    <p class="text-center">No Position has been added Yet !!</p>
+                    </div>
+                {% endfor %}
+
+            </div>
+                    </div>
+                </div>
+            </div>
+        </div>

@@ -1,0 +1,128 @@
+{% extends 'app-base-site.html' %}
+
+{% block title %}Vote Now{% endblock %}
+
+
+{% block content %}
+    {% include 'voters/includes/navbar.inc.html' %}
+    <section class="mt-4">
+        <div class="container">
+            <h3 class="text-center">Voting Dashboard</h3>
+            <form method="POST" onSubmit="voteNow(event)">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-12 offset-md-4 col-md-4">
+                        {% for position in positions %}
+                                <div id="accordianId" role="tablist" aria-multiselectable="true">
+                                    <div class="card mb-3">
+                                        <div class="card-header breezy-bg" role="tab" id="section1HeaderId{{ forloop.counter }}">
+                                            <a data-toggle="collapse" data-parent="#accordianId" href="#section1ContentId{{ forloop.counter }}"
+                                               aria-expanded="true" aria-controls="section1ContentId{{ forloop.counter }}" class="text-white pos-header">
+                                                <h5 class="mb-0">
+                                                    {{ position.name }}
+                                                </h5>
+                                            </a>
+                                        </div>
+                                        <div id="section1ContentId{{ forloop.counter }}" class="collapse in" role="tabpanel"
+                                             aria-labelledby="section1HeaderId{{ forloop.counter }}">
+                                            <div class="card-body">
+                                                <ul class="list-group">
+                                                    {% if position.contestants.count == 1 %}
+                                                        {% for contestant in position.contestants.all %}
+                                                            <div class="card">
+                                                               <img src="{{ contestant.profile_image.url }}" class="prof-img">
+                                                                <div class="card-body">
+                                                                    <div class="container-fluid">
+                                                                        <h6 class="text-dark">{{ contestant.full_name }}</h6>
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <div class="form-check">
+                                                                                    <label class="form-check-label">
+                                                                                        <input type="radio"
+                                                                                               class="form-check-input"
+                                                                                               name="{{ position.pk }}" id="yesOrNo"
+                                                                                               value="1" onchange="getValue(`{{ position.pk }}`, `{{ contestant.pk }}`, 'yes')" >
+                                                                                        Yes
+                                                                                    </label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col">
+                                                                                <label class="form-check-label">
+                                                                                    <input type="radio"
+                                                                                           class="form-check-input"
+                                                                                           name="{{ position.pk }}" id="yesOrNo"
+                                                                                           value="0" onchange="getValue(`{{ position.pk }}`, `{{ contestant.pk }}`, 'no')">
+                                                                                    No
+                                                                                </label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+                                                        {% else %}
+                                                        {% for contestant in position.contestants.all %}
+                                                            <li class="list-group-item">
+                                                                <div class="form-check">
+                                                                    <label class="form-check-label">
+                                                                        <input type="radio" class="form-check-input"
+                                                                               name="{{ position.name }}" value="{{ contestant.pk }}" onchange="addMeUp(`{{ position.name }}`, `{{ contestant.pk }}`)">
+                                                                        <img src="{{ contestant.profile_image.url }}" class="prof-img">
+                                                                        <br>
+                                                                        {{ contestant.full_name }}
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </ul>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        {% endfor %}
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-block btn-success">Cast Vote</button>
+                    </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+    let results = {}
+    function addMeUp(posName, CID){
+            results[`${posName}`] = {'c_id': CID}
+        }
+
+        function getValue(posName, CID, val){
+            results[`${posName}_contestant`] = {'contestant': CID, "value": val}
+        }
+
+        function voteNow(event){
+            event.preventDefault()
+            $.ajax({
+                url: "{% url 'voters:vote' %}",
+                method: 'POST',
+                data: {'csrfmiddlewaretoken': "{{ csrf_token }}", 'data': JSON.stringify(results)},
+                success: (res)=>{
+                    alert(res.data)
+                    setTimeout(
+                        ()=>{
+                            window.location.href = "{% url 'voters:login' %}"
+                        },
+                        3000
+                    )
+                },
+                error: (err)=>{
+                   alert(err)
+                }
+            })
+        }
+    </script>
+{% endblock %}

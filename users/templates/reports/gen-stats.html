@@ -1,0 +1,40 @@
+{% extends "easy_pdf/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div id="content">
+        <div class="">
+            <h1>General Statistics</h1>
+            <hr>
+            <p>
+                Registered Voters: <b>{{ voters }}</b>
+            </p>
+            <p>
+                Vote Casted: <b>{{ voted_voters }}</b>
+            </p>
+            <p>
+                Candidates : <b>{{ aspirants.count }}</b>
+            </p>
+            <hr>
+            <h1 style="margin-top: 3rem">Contestants Results</h1>
+            <hr>
+            {% for position in all_pos %}
+                <div>
+                    <h4 style="font-size: 16px;">
+                        {{ position.name }}
+                    </h4>
+                    {% for aspirant in aspirants %}
+                        {% if aspirant.position.name == position.name %}
+                            <p style="font-size:12px;">
+                                [] {{ aspirant.full_name }} - {{ aspirant.votes }} ::: {{ aspirant.get_yes_percentage }} %
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+
+
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

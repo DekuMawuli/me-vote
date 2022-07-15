@@ -1,0 +1,39 @@
+<div class="row mt-4">
+            <div class="col-12 col-md-3 mb-3 mb-3">
+                <div class="card dash-box" style="border:1px solid rgba(29,33,36,0.62)">
+                    <div class="card-body">
+                        <h4 class="text-center text-dark">Total Voters Registered</h4>
+                        <h1 class="text-center">{{ voters }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 mb-3">
+                <div class="card dash-box" style="border:1px solid rgba(29,33,36,0.62)">
+                    <div class="card-body">
+                        <h4 class="text-center text-dark">Total Votes <br> Casted</h4>
+                        <h1 class="text-center">{{ vv }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 mb-3">
+                <div class="card dash-box" style="border:1px solid rgba(29,33,36,0.62)">
+                    <div class="card-body">
+                        <h4 class="text-center text-dark">Total <br> Contestants</h4>
+                        <h1 class="text-center">{{ request.user.electionadmin.get_all_contestants }}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3 mb-3">
+                <div class="card dash-box" style="border:1px solid rgba(29,33,36,0.62)">
+                    <div class="card-body">
+                        <h4 class="text-center text-dark">Election <br> Status</h4>
+                        {% if request.user.electionadmin.is_open %}
+                            <h2 class="text-center text-success">Active</h2>
+                        {% else %}
+                            <h2 class="text-center text-danger">Closed</h2>
+                        {% endif %}
+                        <a href="{% url 'staffs:toggle_election_status' %}" class="btn btn-block btn-info" >Toggle Status</a>
+                    </div>
+                </div>
+            </div>
+        </div>

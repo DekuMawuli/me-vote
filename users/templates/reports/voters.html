@@ -1,0 +1,63 @@
+{% extends "easy_pdf/base.html" %}
+{% load static %}
+
+{% block extra_style %}
+
+    <style>
+        .email-td{
+            {#width: 10rem#}
+        }
+
+        .voted-td{
+            width: 10%;
+        }
+
+        .level-td{
+            width: 10%;
+        }
+
+        .program-td{
+            width: 15%;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="">
+        <h1>Total Voters Registered</h1>
+            <hr>
+            <table class="table mt-5 table-bordered">
+                <thead class="breezy-bg text-white">
+                <tr>
+                    <th>Student ID</th>
+                    <th>Student Email</th>
+                    <th>Course</th>
+                    <th>Level</th>
+                    <th>Has Voted</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for voter in voters %}
+                        <tr>
+                            <td scope="row">{{ voter.reversed_username }}</td>
+                            <td class="email-td">{{ voter.user.email }}</td>
+                            <td class="program-td">{{ voter.program }}</td>
+                            <td class="level-td">{{ voter.level }}</td>
+                            <td class="voted-td">
+                                {% if voter.has_voted %}
+                                    <span class="text-success">&checkmark;</span>
+                                {% else %}
+                                    <span class="text-danger">&cross;</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p>
+                total students: <b>{{ voters.count }}</b>
+            </p>
+        </div>
+    </div>
+{% endblock %}

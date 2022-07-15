@@ -1,0 +1,38 @@
+{% extends 'app-base-site.html' %}
+
+{% block title %}Voters{% endblock %}
+
+{% block content %}
+    {% include 'voters/includes/navbar.inc.html' %}
+    <div class="container">
+        <table class="table mt-5">
+            <thead class="breezy-bg text-white">
+            <tr>
+                <th>Student ID</th>
+                <th>Student Email</th>
+                <th>Course</th>
+                <th>Level</th>
+                <th>Has Voted</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for voter in voters %}
+                    <tr>
+                        <td scope="row">{{ voter.user.username }}</td>
+                        <td>{{ voter.user.email }}</td>
+                        <td>{{ voter.program }}</td>
+                        <td>{{ voter.level }}</td>
+                        <td>
+                            {% if voter.has_voted %}
+                                <span class="text-success">&checkmark;</span>
+                            {% else %}
+                                <span class="text-danger">&cross;</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

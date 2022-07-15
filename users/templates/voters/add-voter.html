@@ -1,0 +1,64 @@
+{% extends 'app-base-site.html' %}
+{% load widget_tweaks %}
+
+{% block title %}Add Voters{% endblock %}
+
+
+{% block content %}
+    {% include "voters/includes/navbar.inc.html" %}
+    <div class="container">
+        <div class="row mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <script>
+                    alert(`{{ message }}`)
+                </script>
+            {% endfor %}
+
+        {% endif %}
+            <div class="col-12 col-md-6">
+               <div class="card" style="border: dashed 1px #efe">
+                    <div class="card-body">
+                        <h4 class="text-center">Add A Single User</h4>
+                        <form action="{% url 'staffs:process_registration' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="id_username">Student ID</label>
+                                {{ u_form.username|add_class:"form-control" }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_email">Email</label>
+                                {{ u_form.email|add_class:"form-control" }}
+                            </div>
+                            {% for field in v_form %}
+                                <div class="form-group">
+                                    <label for="id_email">{{ field.label }}</label>
+                                    {{ field|add_class:"form-control" }}
+                                </div>
+                            {% endfor %}
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-block btn-success">Add Voter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="card" style="border: dashed 1px #efe">
+                    <div class="card-body">
+                        <h4 class="text-center">Upload A CSV File Here</h4>
+                        <form action="{% url 'staffs:save_csv' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="file" accept="text/csv" name="students" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-block btn-primary">Upload CSV</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

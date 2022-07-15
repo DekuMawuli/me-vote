@@ -1,0 +1,98 @@
+.login-page{
+    height: 100vh;
+    background: linear-gradient(-10deg, #40b497, #8411b3)
+}
+
+.staff-login-page{
+    height: 100vh;
+    background: linear-gradient(-45deg, #8411b3, #ff8686)
+}
+
+.grady-bg{
+    background: linear-gradient(-10deg, #40b497, #8411b3)
+}
+
+.card{
+    border-radius: 0;
+    border: none;
+}
+
+.breezy-bg{
+    background: #8411b3
+}
+
+.shady-bg{
+    background-color: #ff8686;
+}
+
+.curve-in{
+    border-radius: 2rem !important;
+}
+
+.login-card{
+    margin-top: 20vh;
+    min-height: 50vh;
+}
+
+.form-control{
+    border-radius: 0;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border: 1px dashed #20c997;
+}
+
+.btn{
+    border-radius: 0;
+    transition: linear 500ms;
+}
+
+.btn:hover{
+    background-color: #20c997;
+    transition: linear 500ms;
+}
+
+
+.btn:focus{
+    box-shadow: none !important;
+}
+
+.login-card .form-control, .btn{
+    height: 7vh;
+}
+
+.navbar-toggler{
+    border: none !important;
+}
+
+.pos-header:hover{
+    text-decoration: none;
+}
+
+
+.dash-box{
+    min-height: 30vh;
+    border-radius: 1rem;
+}
+
+
+.prof-img{
+    height: 10vh;
+    width:5vw;
+    border-radius: 1vh;
+}
+
+.election-error{
+    margin-top: 10vh;
+    font-size: 3rem;
+}
+
+
+@media only screen and (max-width:768px){
+    .prof-img{
+    height: 20vh;
+    width:40vw;
+    border-radius: 1vh;
+}
+}

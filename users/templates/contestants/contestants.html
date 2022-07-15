@@ -1,0 +1,85 @@
+{% extends 'app-base-site.html' %}
+
+{% block title %}Contestants{% endblock %}
+
+{% block content %}
+
+    {% include 'voters/includes/navbar.inc.html' %}
+    {% if messages %}
+        <script>
+            {% for message in messages %}
+                alert(`{{ message }}`)
+            {% endfor %}
+        </script>
+    {% endif %}
+    <div class="container">
+        <div id="new-list"></div>
+    </div>
+
+
+
+{% endblock %}
+
+
+
+{% block js %}
+
+    <script>
+    $(document).ready(function(){
+       getCandidates()
+    })
+
+
+    function getCandidates(){
+        $.ajax({
+           url: "{% url 'staffs:contestants_json' %}",
+           success: (res)=>{
+               let root = $("#new-list")
+               root.html(res.data)
+           },
+           error: (err)=>{
+               console.log(err)
+           }
+       })
+    }
+
+    function showToEditCandidate(cID){
+        let formModal = $("#updateModal")
+        let root = $("#form-body")
+        $.ajax({
+           url : `/root/contestant/${cID}/`,
+            success: (res)=>{
+               root.empty()
+                formModal.modal("toggle")
+                root.html(res.data)
+        },
+            error: (err)=>{
+               console.log(err)
+            }
+
+        })
+
+    }
+
+
+    function deleteContestant(cID){
+        let res = confirm("Proceeding to Delete Contestant")
+       if (res === true){
+            $.ajax({
+                url: `/root/contestant/${cID}/delete/`,
+                method: 'POST',
+                data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success: (res)=>{
+                    alert(res.data)
+                    getCandidates()
+                },
+                error: (err)=>{
+                    alert(err)
+                }
+            })
+        }
+    }
+
+    </script>
+
+{% endblock %}

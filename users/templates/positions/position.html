@@ -1,0 +1,180 @@
+{% extends 'app-base-site.html' %}
+
+{% block title %}Positions{% endblock %}
+
+
+{% block content %}
+    {% include 'voters/includes/navbar.inc.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 offset-md-3 col-md-6 mt-5">
+                <button class="btn btn-block btn-success text-center mb-3" data-toggle="modal" data-target="#addPositionModal">
+                    Add New Position &plus;
+                </button>
+                <div id="positions-box"></div>
+            </div>
+        </div>
+    </div>
+
+    {#  ADD POSITION MODAL  #}
+    <div class="modal fade" id="addPositionModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        Add Position
+                    </h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" onsubmit="savePosition(event)">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="pos">Position</label>
+                            <input type="text" class="form-control" required name="posName" id="pos" aria-describedby="helpId" placeholder="Position Name">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" id="save-btn" class="btn btn-success text-white">Save &checkmark;</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {#  UPDATE  MODAL HERE  #}
+    <div class="modal fade" id="updatePositionModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Position</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" onsubmit="updatePosition(event)">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="upd">Position</label>
+                            <input type="text" class="form-control" required name="updName" id="upd" aria-describedby="helpId" placeholder="Position Name">
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" id="save-btn" class="btn btn-info text-white">Update &checkmark;</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        // ==================== VARIABLES ========
+        let updateID = ""
+
+        // =======================================
+
+        $(document).ready(()=>{
+            getPositions()
+        })
+
+        // ============== FETCH ALL POS JSON
+        function getPositions(){
+            $.ajax({
+                url: "{% url 'staffs:positions_json' %}",
+                success: (res)=>{
+                    $("#positions-box").html(res.data)
+                },
+                error: (err)=>{
+                    console.log(err)
+                }
+            })
+        }
+
+        // =================================
+
+        function showToEdit(pID){
+            $.ajax({
+                url: `/root/position/${pID}/`,
+                success: (res) =>{
+                    $("#updatePositionModal").modal('show');
+                    $("input[name='updName']").val(res.data.name)
+                    updateID = res.data.pk
+                },
+
+                error: (err) =>{
+                    console.log(err)
+                }
+            })
+        }
+
+        function updatePosition(event){
+            event.preventDefault()
+            $.ajax({
+                url: `/root/position/${updateID}/update/`,
+                method: "POST",
+                data: {
+                    'position': $("input[name='updName']").val(),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: (res) =>{
+                    alert(res.data)
+                    getPositions()
+                    $("#updatePositionModal").modal("toggle")
+                },
+                error: (err) =>{
+                    alert(err)
+                }
+            })
+
+        }
+
+        function deletePosition(pID){
+            let res = confirm("Are you sure ?")
+            if (res === true){
+                $.ajax({
+                    url: `/root/position/${pID}/delete/`,
+                    method: 'POST',
+                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                    success: (res) =>{
+                        alert(res.data)
+                        getPositions()
+                    },
+                    error: (err) =>{
+                        alert(err)
+                    }
+                    })
+            }
+        }
+
+        function savePosition(event){
+            event.preventDefault()
+            let positionName = $('input[name="posName"]').val()
+            if (positionName.length < 3){
+                alert("Minimum Value: 3")
+            }else{
+                $.ajax({
+                method: 'POST',
+                url: "{% url 'staffs:add_position' %}",
+                data: {'position': positionName, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success: (res)=>{
+                    alert(res.data)
+                    getPositions()
+                    $("#addPositionModal").modal('toggle');
+                },
+                error: (err)=>{
+                    alert(`${err}`)
+                    $("#addPositionModal").modal('toggle');
+                }
+            })
+            }
+        }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'app-base-site.html' %}
+
+{% block title %}Staff Login{% endblock %}
+
+{% block content %}
+    <header class="staff-login-page">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 offset-md-4 col-md-4">
+                    <div class="card login-card">
+                        <div class="card-body">
+                            <h2 class="text-center mb-3">Admin Login</h2>
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            <span class="sr-only">Close</span>
+                                        </button>
+                                        <strong>Opps!</strong> {{ message }}
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+                            <form action="{% url 'staffs:process_voting' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="uname">Username</label>
+                                    <input type="text" name="username" id="uname" class="form-control" placeholder="Enter Username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pwd">Password</label>
+                                    <input type="password" name="password" id="pwd" class="form-control" placeholder="Password" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-block text-white curve-in shady-bg">Grant Access</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}

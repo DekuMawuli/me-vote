@@ -1,0 +1,25 @@
+<table class="table table-striped">
+    <thead class="breezy-bg text-white">
+    <tr>
+        <th>Positions</th>
+        <th># Contestants</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for position in positions %}
+        <tr>
+            <td>{{ position.name }}</td>
+            <td class="text-center">{{ position.total_contestants }}</td>
+            <td class="text-center">
+                <button class="btn btn-info" onClick="showToEdit(`{{ position.id }}`)" data-toggle="modal" >
+                    &clubsuit;
+                </button>
+                <button class="btn btn-danger" onClick="deletePosition(`{{ position.id }}`)">&cemptyv;</button>
+            </td>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+

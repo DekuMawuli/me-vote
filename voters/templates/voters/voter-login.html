@@ -1,0 +1,31 @@
+{% extends 'app-base-site.html' %}
+
+{% block title %}Login{% endblock %}
+
+
+{% block content %}
+    <header class="login-page">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 offset-md-4 col-md-4">
+                    <div class="card login-card">
+                        <div class="card-body">
+                            {% if status == "ok" %}
+                                {% include 'voters/includes/voters-form.inc.html' %}
+                            {% else %}
+                                <p class="text-center election-error">
+                                    Election is currently Closed
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+
+{% block js %}
+    <script></script>
+{% endblock %}

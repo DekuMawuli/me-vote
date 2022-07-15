@@ -1,0 +1,85 @@
+{% extends 'app-base-site.html' %}
+
+{% block title %}Results{% endblock %}
+
+{% block content %}
+    {% if request.user.is_authenticated %}
+        {% include 'voters/includes/navbar.inc.html' %}
+    {% else %}
+        {% include 'voters/includes/sim-navbar.html' %}
+    {% endif %}
+    <div class="container mt-5">
+        <h3 class="text-center">General Results</h3>
+        <hr class="my-3">
+        {% include 'voters/includes/results-list.inc.html' %}
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+    $(document).ready(()=>{
+            getResults()
+           // setInterval(refreshResults, 5000)
+
+        })
+
+   // function refreshResults(){
+    //    location.reload()
+   // }
+
+    function getResults(){
+        $.ajax({
+            url: "{% url 'voters:result_json' %}",
+            success: (res)=>{
+                let courses = []
+                let contestantVotes = []
+                for(i in res.data){
+                    if (courses.includes(res.data[i]['posName']) === false){
+                        courses.push(res.data[i].posName)
+                    }
+                    contestantVotes.push(
+                            {
+                                'name': res.data[i].contName,
+                                'votes': res.data[i].votes,
+                                'position': res.data[i].posName
+                            }
+                        )
+                }
+                console.log(courses)
+                console.log(contestantVotes)
+                 for(i in courses){
+                     cts = contestantVotes.filter(ct => ct.position === courses[i])
+                     let ctx = document.getElementById(`${courses[i]}`).getContext('2d');
+                    let myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: cts.map(value => value.name),
+                            datasets: [{
+                                label: '# of Votes',
+                                data: cts.map(value => value.votes),
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.5)',
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                 }
+            },
+            error: (err)=>{
+                console.log(err)
+            }
+        })
+    }
+
+
+</script>
+{% endblock %}
+

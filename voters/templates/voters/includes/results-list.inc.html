@@ -1,0 +1,58 @@
+<div class="row">
+    {% for position in positions %}
+        <div class="col-12 col-md-6">
+            <h3 class="mt-4 mb-4 text-center" id="position-name">{{ position.name }}</h3>
+            {% if position.contestants.count == 1 %}
+                <table class="table">
+                    <thead class="breezy-bg">
+                    <tr>
+                        <th>Name</th>
+                        <th>Yes</th>
+                        <th>No</th>
+                        <th>% Yes</th>
+                        <th>% No</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for contestant in position.contestants.all %}
+                            <tr>
+                                <td>{{ contestant.full_name }}</td>
+                                <td>{{ contestant.votes }}</td>
+                                <td>{{ contestant.no_votes }}</td>
+                                <td>{{ contestant.get_yes_percentage }}</td>
+                                <td>{{ contestant.get_no_percentage }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <table class="table">
+                    <thead class="breezy-bg">
+                    <tr>
+                        <th>Name</th>
+                        <th>Votes</th>
+                        <th>%</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for contestant in position.contestants.all %}
+                            <tr>
+                                <td>{{ contestant.full_name }}</td>
+                                <td>{{ contestant.votes }}</td>
+                                <td>{{ contestant.get_yes_percentage }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            <canvas id="{{ position }}" width="300" height="300"></canvas>
+        </div>
+    {% endfor %}
+
+</div>
+
+
+
+
+

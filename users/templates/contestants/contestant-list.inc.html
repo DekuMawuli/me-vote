@@ -1,0 +1,55 @@
+<div class="mt-4">
+        <table class="table">
+            <thead class="breezy-bg text-white">
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for contestant in contestants %}
+                <tr>
+                    <td scope="row">
+                        <img src="{{ contestant.profile_image.url }}" alt="" class="prof-img">
+                    </td>
+                    <td>
+                        {{ contestant.full_name }}
+                    </td>
+                    <td>
+                        {{ contestant.position.name }}
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-info" onClick="showToEditCandidate(`{{ contestant.id }}`)" data-toggle="modal" data-target="#updateModal">
+                            &clubsuit;
+                        </button>
+                        <button class="btn btn-danger" onClick="deleteContestant(`{{ contestant.id }}`)">&cemptyv;</button>
+                    </td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Candidate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="form-body">
+                Body
+            </div>
+        </div>
+    </div>
+</div>
+
+

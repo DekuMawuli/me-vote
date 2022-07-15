@@ -1,0 +1,43 @@
+{% extends 'app-base-site.html' %}
+{% load widget_tweaks %}
+{% block title %}Add Candidate{% endblock %}
+
+{% block content %}
+    {% include 'voters/includes/navbar.inc.html' %}
+    <div class="container mt-5">
+    {% if messages %}
+        <script>
+            {% for msg in messages %}
+                alert(`{{ msg }}`)
+            {% endfor %}
+        </script>
+    {% endif %}
+        <div class="col-12 offset-md-3 col-md-6">
+            <h3 class="text-center">Add Candidate</h3>
+            <hr>
+            <form action="{% url 'staffs:process_contestant_registration' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="">{{ form.profile_image.label }}</label>
+                    {{ form.profile_image | add_class:"form-control"}}
+                </div>
+                <div class="form-group">
+                    <label for="id_position">Position</label>
+                    <select name="position" id="id_position" class="form-control">
+                        {% for pos in request.user.electionadmin.get_election_positions %}
+                            <option value="{{ pos.pk }}">{{ pos.name }}</option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="">{{ form.full_name.label }}</label>
+                    {{ form.full_name|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-info">Save Candidate &checkmark;</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
